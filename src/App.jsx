@@ -3,7 +3,7 @@ import './App.css'
 
 const MIN_SIZE = 26
 const MAX_SIZE = 110
-const REPLACEMENT_DELAY_MS = 260
+const REPLACEMENT_DELAY_MS = 0
 const DEFAULT_DURATION = 60
 
 const randomBetween = (min, max) => min + Math.random() * (max - min)
