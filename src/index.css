@@ -1,0 +1,40 @@
+:root {
+  --paper: #ffffff;
+  --ink: #111111;
+  --muted: #4a4a4a;
+  --body-font: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  --heading-font: "Garamond", "Times New Roman", serif;
+  --mono: "Consolas", "Courier New", monospace;
+  font: 18px/1.5 var(--body-font);
+  color: var(--ink);
+  background: var(--paper);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+#root {
+  min-height: 100svh;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--heading-font);
+  font-weight: 600;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
