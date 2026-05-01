@@ -25,9 +25,11 @@ function App() {
   const [remainingSeconds, setRemainingSeconds] = useState(DEFAULT_DURATION)
   const [hasStarted, setHasStarted] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
+  const [safeTop, setSafeTop] = useState(0)
   const audioRef = useRef(null)
   const timeoutRef = useRef(null)
   const lastClickRef = useRef(null)
+  const topBarRef = useRef(null)
 
   useEffect(() => {
     if (isPaused || remainingSeconds <= 0 || !hasStarted) {
@@ -54,6 +56,36 @@ function App() {
       if (timeoutRef.current) {
         window.clearTimeout(timeoutRef.current)
       }
+    }
+  }, [])
+
+  useEffect(() => {
+    const topBar = topBarRef.current
+    if (!topBar) {
+      return undefined
+    }
+
+    const updateSafeTop = () => {
+      const nextSafeTop = Math.ceil(topBar.offsetTop + topBar.offsetHeight + 12)
+      setSafeTop(nextSafeTop)
+    }
+
+    updateSafeTop()
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateSafeTop)
+      return () => {
+        window.removeEventListener('resize', updateSafeTop)
+      }
+    }
+
+    const observer = new ResizeObserver(updateSafeTop)
+    observer.observe(topBar)
+    window.addEventListener('resize', updateSafeTop)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', updateSafeTop)
     }
   }, [])
 
@@ -202,8 +234,11 @@ function App() {
 
   return (
     <div className="page">
-      <div className={`stage ${isStopped ? 'is-paused' : ''}`}>
-        <div className="top-bar">
+      <div
+        className={`stage ${isStopped ? 'is-paused' : ''}`}
+        style={{ '--safe-top': `${safeTop}px` }}
+      >
+        <div className="top-bar" ref={topBarRef}>
           <div className="hud" aria-live="polite">
             <span className="hud-item">
               <span className="hud-label">Clicks</span>
@@ -254,6 +289,7 @@ function App() {
               Reset
             </button>
           </div>
+          <div className="top-divider" aria-hidden="true"></div>
         </div>
         <div className="canvas">
           {spots.map((spot) => (
